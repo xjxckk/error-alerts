@@ -3,7 +3,8 @@ Python error handler with Telegram alerts
 
 `pip install error-handler`
 
-```import handler
+```
+import handler
 
 handler = handler.setup(telegram_token='TELEGRAM_TOKEN', telegram_channel=TELEGRAM_CHANNEL_ID, full_error=True)
 
