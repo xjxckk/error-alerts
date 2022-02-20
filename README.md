@@ -1,6 +1,7 @@
 ### error-handler
 Python error handler with Telegram alerts
 
+Installation:
 `pip install error-handler`
 
 Usage:
