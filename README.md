@@ -3,6 +3,7 @@ Python error handler with Telegram alerts
 
 `pip install error-handler`
 
+Usage:
 ```
 import handler
 
@@ -12,6 +13,7 @@ try:
     1 / 0
 except Exception as error:
     handler.alert(title='Test', exception=error)
+    # raise Exception('Raiser') from exception # If you want to raise the exception rather than continue
 ```
 
 Output:
@@ -21,3 +23,5 @@ Test: Traceback (most recent call last):
     1 / 0
 ZeroDivisionError: division by zero
 ```
+
+Prints that in console and sends a Telegram alert to the channel you specified
