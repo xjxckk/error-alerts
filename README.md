@@ -1,19 +1,19 @@
-### error-handler
-Python error handler with Telegram alerts
+### error-alerts
+Python error alerts via Telegram
 
 Installation:
-`pip install error-handler`
+`pip install error-alerts`
 
 Usage:
 ```
-import handler
+import alerts
 
-handler = handler.setup(telegram_token='TELEGRAM_TOKEN', telegram_channel=TELEGRAM_CHANNEL_ID, full_error=True)
+alerts = alerts.setup(telegram_token='TELEGRAM_TOKEN', telegram_channel=TELEGRAM_CHANNEL_ID, full_error=True)
 
 try:
     1 / 0
 except Exception as error:
-    handler.alert(title='Test', exception=error)
+    alerts.send(title='Test', exception=error)
     # raise Exception('Raiser') from exception # If you want to raise the exception rather than continue
 ```
 
