@@ -9,4 +9,4 @@ setup(
     download_url = 'https://github.com/xjxckk/error-handler/archive/refs/tags/v1.tar.gz',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown'
-)
+    )
