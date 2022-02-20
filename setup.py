@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name = 'error-handler',
-    packages = ['handler'],
+    name = 'error-alerts',
+    packages = ['alerts'],
     version = '1',
-    description = 'Error handler with Telegram alerts',
-    url = 'https://github.com/xjxckk/error-handler/',
-    download_url = 'https://github.com/xjxckk/error-handler/archive/refs/tags/v1.tar.gz',
+    description = 'Error alerts via Telegram',
+    url = 'https://github.com/xjxckk/error-alerts/',
+    download_url = 'https://github.com/xjxckk/error-alerts/archive/refs/tags/v1.tar.gz',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown'
     )
