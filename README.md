@@ -6,9 +6,13 @@ Installation:
 
 Options:
 
-`full_error` (False by default): Send full traceback with line of code where error occurred (see sample below).
+`telegram_token`: Bot Telegram token.
 
-`raise_error` (False by default): Raise error and exit code when there is an error. If this is not set to True an alert will be sent and the code will continue running.
+`telegram_channel`: Your Telegram channel ID where you want the alerts to be sent.
+
+`full_error`: Send full traceback with line of code where error occurred (False by default and shown in sample below).
+
+`raise_error`: Raise error and exit code when there is an error. If this is not set to True an alert will be sent and the code will continue running (False by default).
 
 Usage:
 ```
