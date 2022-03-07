@@ -4,17 +4,22 @@ Python error alerts via Telegram
 Installation:
 `pip install error-alerts`
 
+Options:
+
+`full_error` (False by default): Send full traceback with line of code where error occurred (see sample below).
+
+`raise_error` (False by default): Raise error and exit code when there is an error. If this is not set to True an alert will be sent and the code will continue running.
+
 Usage:
 ```
 import alerts
 
-alerts = alerts.setup(telegram_token='TELEGRAM_TOKEN', telegram_channel=TELEGRAM_CHANNEL_ID, full_error=True)
+alerts = alerts.setup(telegram_token='TELEGRAM_TOKEN', telegram_channel=TELEGRAM_CHANNEL_ID, full_error=True, raise_error=True)
 
 try:
     1 / 0
 except Exception as error:
     alerts.send(title='Test', exception=error)
-    # raise Exception('Raiser') from exception # If you want to raise the exception rather than continue
 ```
 
 Output:
