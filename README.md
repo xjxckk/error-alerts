@@ -14,7 +14,12 @@ Usage:
 ```
 import alerts
 
-alerts = alerts.setup(telegram_token='TELEGRAM_TOKEN', telegram_channel=TELEGRAM_CHANNEL_ID, full_error=True, raise_error=True)
+alerts = alerts.setup(
+    telegram_token='TELEGRAM_TOKEN',
+    telegram_channel=TELEGRAM_CHANNEL_ID,
+    full_error=True,
+    raise_error=True
+    )
 
 try:
     1 / 0
