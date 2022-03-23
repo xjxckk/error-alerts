@@ -16,9 +16,9 @@ Options:
 
 Usage:
 ```
-import alerts
+from alerts import alerts
 
-alerts = alerts.setup(
+alerts = setup(
     telegram_token='TELEGRAM_TOKEN',
     telegram_channel=TELEGRAM_CHANNEL_ID,
     full_error=True,
