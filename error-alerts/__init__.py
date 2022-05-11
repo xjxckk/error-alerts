@@ -11,7 +11,7 @@ class setup:
         if self.full_error:
             error = traceback.format_exc()
         message = f'{title}: {error}'
-        self.bot.send_message(self.channel, message)
+        self.bot.send_message(self.channel, message[:4096])
         print(message)
         print()
         if self.raise_error:
