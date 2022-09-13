@@ -9,10 +9,11 @@ class setup:
         self.raise_error = raise_error
         self.resend_repeat_errors = resend_repeat_errors
         self.last_error = None
-    def send(self, title, exception):
-        error = str(exception)
+    def send(self, title, exception=None):
         if self.full_error:
             error = traceback.format_exc()
+        else:
+            error = str(exception)
         message = f'{title}: {error}'
         print(message)
         print()
