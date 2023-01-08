@@ -40,8 +40,8 @@ class setup:
     
     def printer(self, *items, level='info'):
         if self.log:
-            log(*items, level=level)
-            log(level=level)
+            self.log(*items, level=level)
+            self.log(level=level)
         elif level != 'debug':
             print(items)
             print()
