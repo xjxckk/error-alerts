@@ -1,10 +1,10 @@
 import traceback
 from telegram import Bot
 
-class setup:
-    def __init__(self, telegram_token, telegram_channel, log=None, full_error=False, raise_error=False, resend_repeat_errors=True):
-        self.bot = Bot(token=telegram_token)
-        self.channel = telegram_channel
+class telegram:
+    def __init__(self, token, channel, log=None, full_error=False, raise_error=False, resend_repeat_errors=True):
+        self.bot = Bot(token=token)
+        self.channel = channel
         self.log = log
         self.full_error = full_error
         self.raise_error = raise_error
@@ -42,6 +42,6 @@ class setup:
         if self.log:
             self.log(*items, level=level)
             self.log(level=level)
-        elif level != 'debug':
+        elif level != 'debug': # Don't print debug only messages
             print(items)
             print()

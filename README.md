@@ -6,9 +6,9 @@ Installation:
 
 Options:
 
-`telegram_token`: Bot Telegram token.
+`token`: Bot Telegram token.
 
-`telegram_channel`: Your Telegram channel ID where you want the alerts to be sent.
+`channel`: Your Telegram channel ID where you want the alerts to be sent.
 
 `full_error`: Send full traceback with line of code where error occurred (False by default and shown in sample below).
 
@@ -16,14 +16,9 @@ Options:
 
 Usage:
 ```
-from alerts import alerts
+from error_alerts import telegram
 
-alerts = setup(
-    telegram_token='TELEGRAM_TOKEN',
-    telegram_channel=TELEGRAM_CHANNEL_ID,
-    full_error=True,
-    raise_error=True
-    )
+alerts = telegram(token='TELEGRAM_TOKEN', channel=TELEGRAM_CHANNEL_ID, full_error=True, raise_error=True)
 
 try:
     1 / 0

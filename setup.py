@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name = 'error-alerts',
     packages = ['error_alerts'],
-    version = '3.0',
+    version = '3.1',
     description = 'Error alerts via Telegram',
     url = 'https://github.com/xjxckk/error-alerts/',
     download_url = 'https://github.com/xjxckk/error-alerts/archive/refs/tags/v2.tar.gz',
