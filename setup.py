@@ -3,8 +3,8 @@ from setuptools import setup
 setup(
     name = 'error-alerts',
     packages = ['error_alerts'],
-    install_requires=['python-telegram-bot'],
-    version = '3.6',
+    install_requires=['python-telegram-bot==13.15'],
+    version = '3.9',
     description = 'Error alerts via Telegram',
     url = 'https://github.com/xjxckk/error-alerts/',
     download_url = 'https://github.com/xjxckk/error-alerts/archive/refs/tags/v2.tar.gz',

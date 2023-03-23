@@ -18,8 +18,8 @@ class telegram:
             error = str(exception)
         message = f'{title}: {error}'
         if error == self.last_error and not self.resend_repeat_errors:
-            self.printer(message, level='debug')
-        if self.resend_repeat_errors or error != self.last_error:
+            self.printer(message, level='error')
+        if error != self.last_error or self.resend_repeat_errors:
             self.printer(message, level='error')
             if self.channel:
                 try:
@@ -29,26 +29,26 @@ class telegram:
             self.last_error = error
         if self.raise_error:
             raise Exception('Raiser') from exception
-    def send_message(self, *messages, print_message=True, print_with_current_time=True):
+    def send_message(self, *messages, print_message=True, current_time=True):
         final_message = ''
         for message in messages:
             final_message += message
             final_message += ' '
         if print_message:
-            self.printer(final_message, print_with_current_time=print_with_current_time)
+            self.printer(final_message, current_time=current_time)
         if self.channel:
             try:
                 self.bot.send_message(self.channel, final_message[:4096])
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')
     
-    def printer(self, *items, level='info', print_with_current_time=True):
+    def printer(self, *items, level='info', current_time=True):
         if self.logger:
-            if print_with_current_time:
+            if current_time:
                 self.logger.current_time(*items, level=level)
             else:
                 self.logger.log(*items, level=level)
-            self.logger(level=level)
+            self.logger.log(level=level)
         elif level != 'debug': # Don't print debug only messages
             print(*items)
             print()
