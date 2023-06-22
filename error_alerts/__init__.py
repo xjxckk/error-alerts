@@ -23,9 +23,9 @@ class telegram:
             self.printer(message, level='error')
         if error != self.last_error or self.resend_repeat_errors:
             self.printer(message, level='error')
-            if self.channel:
+            if channel:
                 try:
-                    self.bot.send_message(self.channel, message[:4096])
+                    self.bot.send_message(channel, message[:4096])
                 except Exception as telegram_error:
                     self.printer('Error sending alert message to Telegram:', telegram_error, level='error')
             self.last_error = error
@@ -40,9 +40,9 @@ class telegram:
             final_message += ' '
         if print_message:
             self.printer(final_message, current_time=current_time)
-        if self.channel:
+        if channel:
             try:
-                self.bot.send_message(self.channel, final_message[:4096])
+                self.bot.send_message(channel, final_message[:4096])
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')
     
