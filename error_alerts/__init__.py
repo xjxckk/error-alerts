@@ -2,7 +2,7 @@ import traceback
 from telegram import Bot
 
 class telegram:
-    def __init__(self, token=None, channel=None, logger=None, full_error=False, raise_error=False, resend_repeat_errors=True):
+    def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
         if token:
             self.bot = Bot(token=token)
         self.channel = channel
@@ -11,7 +11,9 @@ class telegram:
         self.raise_error = raise_error
         self.resend_repeat_errors = resend_repeat_errors
         self.last_error = None
-    def send(self, title, exception=None):
+    def send(self, title='Error', exception=None, channel=None):
+        if not channel:
+            channel = self.channel
         if self.full_error:
             error = traceback.format_exc()
         else:
@@ -29,7 +31,9 @@ class telegram:
             self.last_error = error
         if self.raise_error:
             raise Exception('Raiser') from exception
-    def send_message(self, *messages, print_message=True, current_time=True):
+    def send_message(self, *messages, print_message=True, current_time=True, channel=None):
+        if not channel:
+            channel = self.channel
         final_message = ''
         for message in messages:
             final_message += message
