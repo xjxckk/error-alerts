@@ -1,10 +1,11 @@
 import traceback
-from telegram import Bot
+from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 
 class telegram:
     def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
         if token:
             self.bot = Bot(token=token)
+            self.username = self.bot.username
         self.channel = channel
         self.logger = logger
         self.full_error = full_error
@@ -31,7 +32,8 @@ class telegram:
             self.last_error = error
         if self.raise_error:
             raise Exception('Raiser') from exception
-    def send_message(self, *messages, print_message=True, current_time=True, channel=None):
+
+    def send_message(self, *messages, print_message=True, current_time=True, channel=None, buttons_dict={}):
         if not channel:
             channel = self.channel
         final_message = ''
@@ -41,10 +43,21 @@ class telegram:
         if print_message:
             self.printer(final_message, current_time=current_time)
         if channel:
+            buttons_markup = self.convert_dict_to_buttons(buttons_dict)
             try:
-                self.bot.send_message(channel, final_message[:4096])
+                message = self.bot.send_message(channel, final_message[:4096], reply_markup=buttons_markup)
+                return message
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')
+        return None
+
+    def convert_dict_to_buttons(self, buttons_dict):
+        buttons = []
+        for key in buttons_dict:
+            button = [InlineKeyboardButton(text=key, callback_data=buttons_dict[key])]
+            buttons.append(button)
+        buttons_markup = InlineKeyboardMarkup(buttons)
+        return buttons_markup
     
     def printer(self, *items, level='info', current_time=True):
         if self.logger:
