@@ -6,13 +6,18 @@ DEFAULT_IGNORED_ERRORS = [
     'Could not authenticate you', # Twitter app suspended
     ]
 
-class telegram(Bot):
+class alerts(Bot):
     def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
         if token:
-            super().__init__(token=token)
+            self.bot = super()
+            self.bot.__init__(token=token)
+            self.message = bot.send_message
 
         self.channel = channel
-        self.logger = logger
+        if logger:
+            self.log, self.current_time = logger.log, logger.current_time
+        else:
+            self.log = None
         self.full_error = full_error
         self.raise_error = raise_error
         self.resend_repeat_errors = resend_repeat_errors
@@ -36,7 +41,7 @@ class telegram(Bot):
                     self.last_error = error
 
                     try:
-                        self.send_message(channel, message[:4096])
+                        self.message(channel, message[:4096])
                     except Exception as telegram_error:
                         self.printer('Error sending alert message to Telegram:', telegram_error, level='error')
 
@@ -55,7 +60,7 @@ class telegram(Bot):
         if channel:
             buttons_markup = self.convert_dict_to_buttons(buttons_dict)
             try:
-                message = self.send_message(channel, final_message[:4096], reply_markup=buttons_markup)
+                message = self.message(channel, final_message[:4096], reply_markup=buttons_markup)
                 return message
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')
@@ -70,12 +75,16 @@ class telegram(Bot):
         return buttons_markup
     
     def printer(self, *items, level='info', current_time=True):
-        if self.logger:
+        if self.log:
             if current_time:
-                self.logger.current_time(*items, level=level)
+                self.current_time(*items, level=level)
             else:
-                self.logger.log(*items, level=level)
-            self.logger.log(level=level)
+                self.log(*items, level=level)
+            self.log(level=level)
         elif level != 'debug': # Don't print debug only messages
             print(*items)
             print()
+
+class telegram:
+    def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
+        alerts(token, channel, logger, full_error, raise_error, resend_repeat_errors)

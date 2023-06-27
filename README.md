@@ -16,9 +16,9 @@ Options:
 
 Usage:
 ```
-from error_alerts import telegram
+from error_alerts import alerts
 
-alerts = telegram(token='TELEGRAM_TOKEN', channel=TELEGRAM_CHANNEL_ID, full_error=True, raise_error=True)
+alerts = alerts(token='TELEGRAM_TOKEN', channel=TELEGRAM_CHANNEL_ID, full_error=True, raise_error=True)
 
 try:
     1 / 0
