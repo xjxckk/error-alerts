@@ -1,17 +1,23 @@
 import traceback
 from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 
-class telegram:
+DEFAULT_IGNORED_ERRORS = [
+    'The service is currently unavailable', # Google sheets API down
+    'Could not authenticate you', # Twitter app suspended
+    ]
+
+class telegram(Bot):
     def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
         if token:
-            self.bot = Bot(token=token)
-            self.username = self.bot.username
+            super().__init__(token=token)
+
         self.channel = channel
         self.logger = logger
         self.full_error = full_error
         self.raise_error = raise_error
         self.resend_repeat_errors = resend_repeat_errors
         self.last_error = None
+
     def send(self, title='Error', exception=None, channel=None):
         if not channel:
             channel = self.channel
@@ -20,16 +26,20 @@ class telegram:
         else:
             error = str(exception)
         message = f'{title}: {error}'
-        if error == self.last_error and not self.resend_repeat_errors:
-            self.printer(message, level='error')
+        
+        self.printer(message, level='error')
+
         if error != self.last_error or self.resend_repeat_errors:
-            self.printer(message, level='error')
+
             if channel:
-                try:
-                    self.bot.send_message(channel, message[:4096])
-                except Exception as telegram_error:
-                    self.printer('Error sending alert message to Telegram:', telegram_error, level='error')
-            self.last_error = error
+                if all(ignored_error not in error for ignored_error in DEFAULT_IGNORED_ERRORS):
+                    self.last_error = error
+
+                    try:
+                        self.send_message(channel, message[:4096])
+                    except Exception as telegram_error:
+                        self.printer('Error sending alert message to Telegram:', telegram_error, level='error')
+
         if self.raise_error:
             raise Exception('Raiser') from exception
 
@@ -45,7 +55,7 @@ class telegram:
         if channel:
             buttons_markup = self.convert_dict_to_buttons(buttons_dict)
             try:
-                message = self.bot.send_message(channel, final_message[:4096], reply_markup=buttons_markup)
+                message = self.send_message(channel, final_message[:4096], reply_markup=buttons_markup)
                 return message
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')
