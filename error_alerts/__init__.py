@@ -8,10 +8,13 @@ DEFAULT_IGNORED_ERRORS = [
 
 class alerts(Bot):
     def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
-        if token:
-            self.bot = super()
-            self.bot.__init__(token=token)
-            self.message = bot.send_message
+        if token and channel:
+            bot = super()
+            bot.__init__(token=token)
+            self.telegram_bot = bot
+
+            chat = self.get_chat(channel)
+            # print(chat.title)
 
         self.channel = channel
         if logger:
@@ -41,14 +44,15 @@ class alerts(Bot):
                     self.last_error = error
 
                     try:
-                        self.message(channel, message[:4096])
+                        self.telegram_bot.send_message(channel, message[:4096])
                     except Exception as telegram_error:
                         self.printer('Error sending alert message to Telegram:', telegram_error, level='error')
 
         if self.raise_error:
             raise Exception('Raiser') from exception
 
-    def send_message(self, *messages, print_message=True, current_time=True, channel=None, buttons_dict={}):
+    def send_message(self, *messages, print_message=True, current_time=True, channel=None, buttons={}):
+        'buttons should be a list or dict, 64 character limit'
         if not channel:
             channel = self.channel
         final_message = ''
@@ -58,20 +62,42 @@ class alerts(Bot):
         if print_message:
             self.printer(final_message, current_time=current_time)
         if channel:
-            buttons_markup = self.convert_dict_to_buttons(buttons_dict)
+            buttons_markup = self.convert_to_buttons(buttons)
             try:
-                message = self.message(channel, final_message[:4096], reply_markup=buttons_markup)
+                message = self.telegram_bot.send_message(channel, final_message[:4096], reply_markup=buttons_markup)
                 return message
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')
+                self.printer('buttons_markup:')
+                self.printer(buttons_markup)
+                raise Exception('Raiser') from telegram_error
         return None
+    
+    def send_photo(self, photo, *messages, channel=None):
+        if not channel:
+            channel = self.channel
+        caption = ''
+        for message in messages:
+            caption += message
+            caption += ' '
+        try:
+            self.telegram_bot.send_photo(channel, photo, caption)
+        except Exception as telegram_error:
+            self.printer('Error sending photo to Telegram:', telegram_error, level='error')
 
-    def convert_dict_to_buttons(self, buttons_dict):
-        buttons = []
-        for key in buttons_dict:
-            button = [InlineKeyboardButton(text=key, callback_data=buttons_dict[key])]
-            buttons.append(button)
-        buttons_markup = InlineKeyboardMarkup(buttons)
+    def convert_to_buttons(self, buttons):
+        buttons_list = []
+        if type(buttons) == list:
+            for item in buttons:
+                button = [InlineKeyboardButton(text=item, callback_data=item)]
+                buttons_list.append(button)
+
+        elif type(buttons) == dict:
+            for key in buttons:
+                button = [InlineKeyboardButton(text=key, callback_data=buttons[key])]
+                buttons_list.append(button)
+
+        buttons_markup = InlineKeyboardMarkup(buttons_list)
         return buttons_markup
     
     def printer(self, *items, level='info', current_time=True):
@@ -85,6 +111,4 @@ class alerts(Bot):
             print(*items)
             print()
 
-class telegram:
-    def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
-        alerts(token, channel, logger, full_error, raise_error, resend_repeat_errors)
+telegram = alerts
