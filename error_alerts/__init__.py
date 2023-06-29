@@ -68,9 +68,7 @@ class alerts(Bot):
                 return message
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')
-                self.printer('buttons_markup:')
-                self.printer(buttons_markup)
-                raise Exception('Raiser') from telegram_error
+                
         return None
     
     def send_photo(self, photo, *messages, channel=None):
