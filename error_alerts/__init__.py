@@ -76,8 +76,9 @@ class alerts(Bot):
             channel = self.channel
         caption = ''
         for message in messages:
-            caption += message
-            caption += ' '
+            if message:
+                caption += message
+                caption += ' '
         try:
             self.telegram_bot.send_photo(channel, photo, caption)
         except Exception as telegram_error:
