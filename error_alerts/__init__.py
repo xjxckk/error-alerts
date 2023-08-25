@@ -8,13 +8,13 @@ DEFAULT_IGNORED_ERRORS = [
 
 class alerts(Bot):
     def __init__(self, token=None, channel=None, logger=None, raise_error=False, resend_repeat_errors=False, full_error=None):
-        if token and channel:
+        if token:
             bot = super()
             bot.__init__(token=token)
             self.telegram_bot = bot
 
-            chat = self.get_chat(channel)
-            # print(chat.title)
+            if channel:
+                chat = self.get_chat(channel)
 
         self.channel = channel
         if logger:
