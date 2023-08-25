@@ -7,7 +7,7 @@ DEFAULT_IGNORED_ERRORS = [
     ]
 
 class alerts(Bot):
-    def __init__(self, token=None, channel=None, logger=None, full_error=True, raise_error=False, resend_repeat_errors=True):
+    def __init__(self, token=None, channel=None, logger=None, raise_error=False, resend_repeat_errors=False, full_error=None):
         if token and channel:
             bot = super()
             bot.__init__(token=token)
@@ -21,7 +21,7 @@ class alerts(Bot):
             self.log, self.current_time = logger.log, logger.current_time
         else:
             self.log = None
-        self.full_error = full_error
+            
         self.raise_error = raise_error
         self.resend_repeat_errors = resend_repeat_errors
         self.last_error = None
@@ -29,22 +29,27 @@ class alerts(Bot):
     def send(self, title='Error', exception=None, channel=None):
         if not channel:
             channel = self.channel
-        if self.full_error:
-            error = traceback.format_exc()
-        else:
-            error = str(exception)
-        message = f'{title}: {error}'
+
+        full_error = traceback.format_exc()
+        full_error_message = f'{title}: {full_error}'
         
-        self.printer(message, level='error')
+        self.printer(full_error_message, level='error')
+        
+        if exception:
+            error = str(exception)
+            error_message = f'{title}: {error}'
+        else:
+            error = full_error
+            error_message = full_error_message
 
         if error != self.last_error or self.resend_repeat_errors:
-
             if channel:
                 if all(ignored_error not in error for ignored_error in DEFAULT_IGNORED_ERRORS):
                     self.last_error = error
 
                     try:
-                        self.telegram_bot.send_message(channel, message[:4096])
+                        self.telegram_bot.send_message(channel, error_message[:4096])
+
                     except Exception as telegram_error:
                         self.printer('Error sending alert message to Telegram:', telegram_error, level='error')
 
@@ -59,8 +64,10 @@ class alerts(Bot):
         for message in messages:
             final_message += message
             final_message += ' '
+
         if print_message:
             self.printer(final_message, current_time=current_time)
+            
         if channel:
             buttons_markup = self.convert_to_buttons(buttons)
             try:
