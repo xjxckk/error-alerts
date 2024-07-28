@@ -6,7 +6,7 @@ DEFAULT_IGNORED_ERRORS = [
     'Could not authenticate you', # Twitter app suspended
     ]
 
-class alerts(Bot):
+class Alerts(Bot):
     def __init__(self, token=None, channel=None, logger=None, raise_error=False, resend_repeat_errors=False, full_error=None):
         if token:
             bot = super()
@@ -118,3 +118,4 @@ class alerts(Bot):
             print()
 
 telegram = alerts
+alerts = Alerts
