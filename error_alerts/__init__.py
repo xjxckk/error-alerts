@@ -117,5 +117,5 @@ class Alerts(Bot):
             print(*items)
             print()
 
-telegram = alerts
+telegram = Alerts
 alerts = Alerts
