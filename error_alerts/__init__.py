@@ -71,7 +71,7 @@ class Alerts(Bot):
         if channel:
             buttons_markup = self.convert_to_buttons(buttons)
             try:
-                message = self.telegram_bot.send_message(channel, final_message[:4096], reply_markup=buttons_markup)
+                message = self.telegram_bot.send_message(channel, final_message[:4096], reply_markup=buttons_markup, parse_mode='MARKDOWN')
                 return message
             except Exception as telegram_error:
                 self.printer('Error sending message to Telegram:', telegram_error, level='error')

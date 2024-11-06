@@ -4,7 +4,7 @@ setup(
     name = 'error-alerts',
     packages = ['error_alerts'],
     install_requires=['python-telegram-bot==13.15'],
-    version = '6.2',
+    version = '6.3',
     description = 'Error alerts via Telegram',
     url = 'https://github.com/xjxckk/error-alerts/',
     download_url = 'https://github.com/xjxckk/error-alerts/archive/refs/tags/v2.tar.gz',
